@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Portal Mitra – Tokoku</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F6FA;--surface:#fff;--ink:#15182E;--muted:#5B607A;--line:#E3E5EF;--brand:#4A3AFF;--brand-ink:#fff;--danger:#D92D4B;--gold:#C9A24B;
+--fd:'Bricolage Grotesque',system-ui,sans-serif;--fb:'Geist',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0F1120;--surface:#181B30;--ink:#F1F2FA;--muted:#A2A7C4;--line:#2A2E4A;--brand:#7C70FF;--brand-ink:#0F1120}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+h1,h2,h3{font-family:var(--fd);letter-spacing:-.02em}
+a{color:inherit;text-decoration:none}
+[hidden],.hidden{display:none!important}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:600 .92rem var(--fb);cursor:pointer;gap:8px}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.btn.danger{color:var(--danger)}
+.btn:disabled{opacity:.5;cursor:default}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;margin-bottom:14px}
+.panel h2{font-size:1.2rem;margin-bottom:14px}
+.muted{color:var(--muted)}
+.linkbtn{background:none;border:0;padding:0;color:var(--muted);font:500 .92rem var(--fb);cursor:pointer;text-decoration:underline}
+.linkbtn:hover{color:var(--ink)}
+
+/* Masuk / daftar */
+.gate{min-height:100vh;display:grid;grid-template-columns:1fr 1.1fr}
+.brand{background:#4A3AFF;color:#fff;padding:44px 52px;display:flex;flex-direction:column;justify-content:space-between;gap:40px;position:relative;overflow:hidden}
+.logo{font:800 1.6rem var(--fd);letter-spacing:-.03em}
+.logo span{color:#FFD84D}
+.brand .logo,.brand-body{position:relative;z-index:1}
+.brand-body{max-width:28em}
+.brand h1{font-size:clamp(2rem,4.2vw,3.2rem);font-weight:800;line-height:1.05}
+.brand p{margin:16px 0 22px;opacity:.88}
+.brand ul{list-style:none;display:grid;gap:10px}
+.brand li{display:flex;gap:12px;align-items:center;font-weight:500}
+.brand li::before{content:"";width:9px;height:9px;border-radius:50%;background:#FFD84D;flex:none}
+.blob{position:absolute;right:-90px;bottom:-90px;width:300px;height:300px;border-radius:50%;background:#FFD84D}
+.side{display:grid;place-items:center;padding:32px}
+.card{width:100%;max-width:430px}
+.card h2{font-size:1.8rem;font-weight:800;line-height:1.1}
+.card>p{color:var(--muted);margin:10px 0 22px}
+.seg{display:inline-flex;gap:4px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;margin-bottom:22px}
+.seg button{padding:8px 18px;border-radius:999px;border:0;background:transparent;color:var(--muted);font:600 .92rem var(--fb);cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.msg{color:var(--danger);margin-top:14px;font-size:.92rem;min-height:1.2em}
+.msg.ok{color:#16A34A}
+@media (max-width:820px){.gate{grid-template-columns:1fr}.brand{padding:28px 24px;gap:20px}.brand ul{display:none}.blob{width:160px;height:160px}.side{padding:28px 20px 48px}}
+
+/* Form */
+form{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+form.one{grid-template-columns:1fr}
+label{display:flex;flex-direction:column;gap:5px;font-size:.88rem;font-weight:600}
+label small{font-weight:400;color:var(--muted)}
+input,textarea,select{font:400 1rem var(--fb);padding:11px 13px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+input[type=color]{padding:3px;height:44px}
+.check{flex-direction:row;align-items:center;gap:10px;font-weight:500}
+.check input{width:auto}
+.full{grid-column:1/-1}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+@media (max-width:640px){form{grid-template-columns:1fr}}
+
+/* App */
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;height:68px;gap:12px}
+.chip{background:var(--ink);color:var(--bg);font-size:.78rem;font-weight:600;padding:3px 11px;border-radius:999px}
+.user{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.88rem}
+.user i{width:34px;height:34px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font:700 .95rem var(--fb);font-style:normal;background-size:cover;background-position:center}
+main{padding-bottom:60px}
+.hello{margin-top:28px}
+.hello h2{font-size:1.9rem;font-weight:800;line-height:1.1}
+.hello p{color:var(--muted);margin:6px 0 20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px 20px 18px 24px;position:relative}
+.stat::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:4px;border-radius:0 4px 4px 0;background:var(--brand)}
+.stat.ok::before{background:#16A34A}.stat.warn::before{background:#F59E0B}
+.stat b{font:800 1.6rem/1.1 var(--fd);display:block;word-break:break-word}
+.stat span{color:var(--muted);font-size:.88rem}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr);gap:10px}.user span{display:none}}
+.tabs{max-width:100%;overflow-x:auto;display:inline-flex;gap:4px;margin:0 0 18px;padding:5px;background:var(--surface);border:1px solid var(--line);border-radius:999px}
+.tabs button{white-space:nowrap;padding:9px 18px;border-radius:999px;border:0;background:transparent;color:var(--muted);font:600 .95rem var(--fb);cursor:pointer}
+.tabs button.on{background:var(--ink);color:var(--bg)}
+.list{display:grid;gap:10px;margin-top:18px}
+.item{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.sw{width:56px;height:56px;border-radius:12px;background-size:cover;background-position:center;display:grid;place-items:center;font:800 1.2rem var(--fd);color:#fff}
+.item h3{font-size:1rem}
+.item p{color:var(--muted);font-size:.88rem}
+.badge{display:inline-block;font-size:.75rem;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--danger);color:#fff;margin-left:8px}
+.badge.ok{background:#16A34A}.badge.wait{background:#F59E0B}
+.empty{text-align:center;color:var(--muted)}
+.bprev{width:150px;aspect-ratio:1;border-radius:14px;border:1.5px dashed var(--line);background:var(--bg) center/cover no-repeat}
+.bprev.lg{width:96px;border-radius:20px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 10px;align-items:center}
+.tools select,.tools input{width:auto}
+.linkbox{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.linkbox code{flex:1;min-width:200px;background:var(--bg);border:1.5px solid var(--line);padding:10px 12px;border-radius:12px;font-size:.88rem;word-break:break-all}
+ol.how{margin-left:20px;display:grid;gap:6px;color:var(--muted)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 20px;border-radius:999px;font-weight:600;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .2s;z-index:99}
+#toast.show{opacity:1}
+@media (max-width:640px){.item{grid-template-columns:48px 1fr}.item .row{grid-column:1/-1}.sw{width:48px;height:48px}}
+/* Chat pelanggan */
+.chatbox{display:grid;grid-template-columns:300px 1fr;gap:14px;height:min(620px,calc(100vh - 260px));min-height:420px}
+.clist{overflow:auto;display:grid;gap:8px;align-content:start}
+.ci{display:flex;gap:10px;align-items:center;text-align:left;width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;cursor:pointer;color:var(--ink);font:inherit}
+.ci.on{border-color:var(--brand)}
+.ci b{display:block}
+.ci small{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.cth{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;min-height:0}
+.cthh{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.cmsgs{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:8px}
+.cm{max-width:78%;padding:9px 13px;border-radius:16px;white-space:pre-wrap;word-break:break-word}
+.cm.usr{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
+.cm.adm{align-self:flex-end;background:var(--brand);color:var(--brand-ink)}
+.cm small{display:block;opacity:.7;font-size:.72rem;margin-top:3px}
+.cm .cp{font-size:.78rem;font-weight:600;opacity:.9;margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid currentColor}
+.cform{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);align-items:flex-end}
+.cform textarea{resize:none}
+.cimg{max-width:100%;max-height:240px;border-radius:12px;display:block;margin-bottom:4px;cursor:zoom-in}
+.clb{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.85);display:grid;place-items:center;cursor:zoom-out;padding:12px}
+.clb img{max-width:94vw;max-height:90vh;border-radius:12px}
+@media (max-width:760px){.chatbox{grid-template-columns:1fr;height:auto}.clist{max-height:220px}.cth{height:480px}}
+.waitbox{min-height:100vh;display:grid;place-items:center;padding:24px}
+.waitbox .panel{max-width:460px;text-align:center}
+.waitbox p{color:var(--muted);margin:10px 0 20px}
+</style>
+</head>
+<body>
+
+<!-- ===== Masuk / daftar ===== -->
+<div id="vAuth" class="gate">
+  <section class="brand">
+    <div class="logo">toko<span>ku</span> <small style="font:600 .9rem var(--fb);opacity:.8">Mitra</small></div>
+    <div class="brand-body">
+      <h1>Jual brand kamu di Tokoku.</h1>
+      <p>Dapatkan halaman toko sendiri, kelola produk dan pesananmu, semuanya dari satu portal.</p>
+      <ul>
+        <li>Halaman toko dengan alamat sendiri</li>
+        <li>Kelola produk, stok, dan pesanan sendiri</li>
+        <li>Pendaftaran ditinjau dan disetujui admin</li>
+      </ul>
+    </div>
+    <i class="blob"></i>
+  </section>
+  <section class="side">
+    <div class="card">
+      <div class="seg" role="tablist"><button type="button" id="segIn" class="on">Masuk</button><button type="button" id="segUp">Daftar mitra</button></div>
+
+      <div id="paneIn">
+        <h2>Masuk ke portal mitra</h2>
+        <p>Pakai email dan password yang kamu buat saat mendaftar.</p>
+        <form id="loginForm" class="one">
+          <label>Email<input id="lEmail" type="email" autocomplete="username" required></label>
+          <label>Password<input id="lPass" type="password" autocomplete="current-password" required minlength="6"></label>
+          <button class="btn primary" id="btnLogin" type="submit">Masuk</button>
+        </form>
+        <div class="msg" id="loginMsg" role="alert"></div>
+        <div class="row" style="justify-content:space-between;margin-top:18px"><button class="linkbtn" id="btnReset" type="button">Lupa password?</button><a class="linkbtn" href="tokoku.html">Kembali ke toko</a></div>
+      </div>
+
+      <div id="paneUp" hidden>
+        <h2 id="upTitle">Daftar sebagai mitra</h2>
+        <p id="upSub">Isi data brand kamu. Admin Tokoku akan meninjau pendaftaran, dan tokomu aktif setelah disetujui.</p>
+        <form id="regForm">
+          <label class="full">Nama brand<input id="rName" maxlength="40" required></label>
+          <label class="full">Alamat toko<small id="rSlugHint">Dipakai di link tokomu. Huruf kecil, angka, strip.</small><input id="rSlug" maxlength="30" required pattern="[a-z0-9\-]{3,30}"></label>
+          <label>Nama pemilik<input id="rOwner" maxlength="60" required></label>
+          <label>No. WhatsApp<small>Pembeli menghubungi nomor ini</small><input id="rWa" type="tel" placeholder="08123456789" required></label>
+          <label class="full">Deskripsi singkat brand<textarea id="rDesc" rows="2" maxlength="160"></textarea></label>
+          <label class="full" id="rEmailL">Email<input id="rEmail" type="email" autocomplete="username"></label>
+          <label class="full" id="rPassL">Password<small>Minimal 6 karakter</small><input id="rPass" type="password" autocomplete="new-password" minlength="6"></label>
+          <button class="btn primary full" id="btnReg" type="submit">Kirim pendaftaran</button>
+        </form>
+        <div class="msg" id="regMsg" role="alert"></div>
+        <div class="row" style="margin-top:14px"><button class="linkbtn hidden" id="btnOutReg" type="button">Keluar</button></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== Menunggu / ditangguhkan ===== -->
+<div id="vWait" class="waitbox" hidden>
+  <div class="panel">
+    <div class="logo" style="color:var(--ink)">toko<span style="color:var(--brand)">ku</span></div>
+    <h2 id="wTitle" style="margin-top:16px">Pendaftaran sedang ditinjau</h2>
+    <p id="wText">Admin akan memeriksa data brand kamu. Setelah disetujui, portal ini langsung terbuka dan tokomu tampil di website.</p>
+    <div class="row" style="justify-content:center"><a class="btn primary" id="wWa" target="_blank" rel="noopener" hidden>Hubungi admin</a><button class="btn" id="wOut" type="button">Keluar</button></div>
+  </div>
+</div>
+
+<!-- ===== Dashboard mitra ===== -->
+<div id="vApp" hidden>
+  <header>
+    <div class="wrap">
+      <div class="row"><div class="logo">toko<span style="color:var(--brand)">ku</span></div><span class="chip">Mitra</span></div>
+      <div class="row">
+        <a class="btn" id="hView" target="_blank" rel="noopener">Lihat toko saya</a>
+        <div class="user"><i id="avatar">M</i><span id="who"></span></div>
+        <button class="btn" id="btnOut" type="button">Keluar</button>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="hello"><h2 id="hello">Halo!</h2><p>Ringkasan penjualan brand kamu.</p></div>
+    <div class="tabs" role="tablist">
+      <button class="on" data-tab="ringkasan">Ringkasan</button>
+      <button data-tab="produk">Produk</button>
+      <button data-tab="pesanan">Pesanan</button>
+      <button data-tab="chat">Chat pelanggan <span class="badge" id="chBadge" hidden>0</span></button>
+      <button data-tab="profil">Profil toko</button>
+    </div>
+
+    <div id="tab-ringkasan">
+      <div class="stats" id="stats"></div>
+      <div class="panel">
+        <h2>Link tokomu</h2>
+        <div class="linkbox"><code id="myLink"></code><button class="btn primary" id="copyLink" type="button">Salin link</button></div>
+        <p class="muted" style="margin-top:10px;font-size:.9rem">Bagikan link ini ke pelanggan, sosial media, atau bio Instagram-mu.</p>
+        <div id="altLinks" style="margin-top:18px;display:grid;gap:12px"></div>
+        <p class="msg" id="linkHint" hidden style="margin-top:8px">Peringatan: link ini hanya berfungsi di komputer ini karena portal dibuka dari file lokal. Minta admin mengisi PUBLIC_URL (alamat website) di file portal.</p>
+      </div>
+      <div class="panel">
+        <h2>Cara kerja komisi</h2>
+        <ol class="how">
+          <li>Pelanggan memesan lewat WhatsApp-mu, kamu terima pembayaran langsung.</li>
+          <li>Catat pesanan di tab Pesanan dan tandai lunas setelah uang masuk.</li>
+          <li id="howPct">Komisi toko dihitung dari penjualan lunas.</li>
+          <li>Setor komisi ke Tokoku. Admin menandai “Komisi diterima” dan angka di atas berkurang.</li>
+        </ol>
+        <div class="row" style="margin-top:14px"><a class="btn" id="adminWa" target="_blank" rel="noopener" hidden>Hubungi admin Tokoku</a></div>
+      </div>
+    </div>
+
+    <div id="tab-produk" class="hidden">
+      <div class="panel">
+        <h2 id="pTitle">Tambah produk</h2>
+        <form id="pForm">
+          <label class="full">Nama produk<input id="pName" required maxlength="80"></label>
+          <label class="full">Deskripsi singkat<textarea id="pDesc" rows="2" maxlength="160"></textarea></label>
+          <label>Harga jual (Rp)<input id="pPrice" type="number" min="0" required></label>
+          <label>Harga coret (Rp)<small>Kosongkan jika tidak ada diskon</small><input id="pOld" type="number" min="0"></label>
+          <label>Label<small>Contoh: Baru, Terlaris</small><input id="pTag" maxlength="20"></label>
+          <label>Stok<small>Kosongkan jika tidak dibatasi</small><input id="pStock" type="number" min="0"></label>
+          <label>Kategori<select id="pCat"><option value="">Tanpa kategori</option></select></label>
+          <label>Warna latar<input id="pColor" type="color" value="#B8B2FF"></label>
+          <label class="full">Foto produk<small>JPG/PNG/WebP, otomatis dipotong persegi dan dikompres.</small><input id="pFile" type="file" accept="image/*"></label>
+          <div class="full row"><div class="bprev" id="pPrev"></div><button class="btn danger" id="pClr" type="button">Hapus foto</button></div>
+          <label class="check full"><input id="pActive" type="checkbox" checked>Tampilkan di toko</label>
+          <div class="row full"><button class="btn primary" id="pSave" type="submit">Simpan produk</button><button class="btn" id="pCancel" type="button">Batal</button></div>
+        </form>
+      </div>
+      <div class="list" id="pList"></div>
+    </div>
+
+    <div id="tab-pesanan" class="hidden">
+      <div class="panel">
+        <h2>Catat pesanan</h2>
+        <form id="oForm">
+          <label>Nama pelanggan<input id="oName" required maxlength="60"></label>
+          <label>No. WhatsApp<input id="oPhone" type="tel" placeholder="08123456789"></label>
+          <label>Produk<select id="oProd"></select></label>
+          <label>Jumlah<input id="oQty" type="number" min="1" value="1" required></label>
+          <label>Total bayar (Rp)<small>Terisi otomatis dari harga, bisa diubah</small><input id="oTotal" type="number" min="0" required></label>
+          <label>Catatan<input id="oNote" maxlength="150" placeholder="Alamat kirim, dll."></label>
+          <div class="row full"><button class="btn primary" type="submit">Simpan pesanan</button></div>
+        </form>
+      </div>
+      <div class="tools">
+        <select id="oFilter"><option value="">Semua status</option><option>Menunggu Pembayaran</option><option>Diproses</option><option>Dikirim</option><option>Selesai</option><option>Batal</option></select>
+        <input id="oMonth" type="month" title="Filter bulan">
+        <span class="muted" id="oCount"></span>
+      </div>
+      <div class="list" id="oList" style="margin-top:0"></div>
+    </div>
+
+    <div id="tab-chat" class="hidden">
+      <p class="muted" style="margin-bottom:12px">Pelanggan yang menekan <b>Chat penjual</b> di produkmu masuk ke sini. Balas langsung dari halaman ini.</p>
+      <div class="chatbox">
+        <div class="clist" id="chList"></div>
+        <div class="cth">
+          <div class="cthh"><b id="chWho">Pilih percakapan</b><span class="muted" id="chProd"></span></div>
+          <div class="cmsgs" id="chMsgs"></div>
+          <form class="cform" id="chForm"><textarea id="chText" rows="1" maxlength="1000" placeholder="Tulis balasan..." aria-label="Balasan" disabled></textarea><button class="btn primary" id="chSend" type="submit" disabled>Kirim</button></form>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-profil" class="hidden">
+      <div class="panel">
+        <h2>Profil toko</h2>
+        <form id="sForm">
+          <label>Nama brand<input id="sName" required maxlength="40"></label>
+          <label>Nama pemilik<input id="sOwner" required maxlength="60"></label>
+          <label>No. WhatsApp<input id="sWa" type="tel" required></label>
+          <label>Warna brand<input id="sColor" type="color" value="#4A3AFF"></label>
+          <label class="full">Deskripsi singkat<textarea id="sDesc" rows="2" maxlength="160"></textarea></label>
+          <label class="full">Logo<small>Opsional. Otomatis dipotong persegi.</small><input id="sFile" type="file" accept="image/*"></label>
+          <div class="full row"><div class="bprev lg" id="sPrev"></div><button class="btn danger" id="sClr" type="button">Hapus logo</button></div>
+          <label class="full">Rekening untuk komisi / pencairan<small>Hanya dilihat admin. Contoh: BCA 1234567890 a.n. Nama</small><input id="sBank" maxlength="120"></label>
+          <label class="full">Alamat toko<small>Tidak bisa diubah, hubungi admin jika perlu ganti.</small><input id="sSlug" disabled></label>
+          <div class="row full"><button class="btn primary" type="submit">Simpan profil</button></div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="toast" role="status"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, increment, writeBatch, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ====== KONFIGURASI FIREBASE (sama dengan tokoku.html dan admin.html) ====== */
+const firebaseConfig = {
+  apiKey: "AIzaSyCqhLvrLnJwZnaqthRJjqDwUN9_xpgWyZI",
+  authDomain: "database-e5b59.firebaseapp.com",
+  projectId: "database-e5b59",
+  storageBucket: "database-e5b59.firebasestorage.app",
+  messagingSenderId: "1068757334273",
+  appId: "1:1068757334273:web:a542af0c1d901f88848300",
+  measurementId: "G-X31DP5DZ1T"
+};
+/* ========================================================================== */
+
+const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
+const $ = id => document.getElementById(id);
+const rp = n => "Rp" + Number(n || 0).toLocaleString("id-ID");
+const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+const mkBtn = (t, fn, cls = "") => { const b = el("button", "btn " + cls, t); b.type = "button"; b.onclick = fn; return b; };
+const toast = t => { const e = $("toast"); e.textContent = t; e.classList.add("show"); setTimeout(() => e.classList.remove("show"), 2400); };
+const slugify = t => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 30);
+const RESERVED = ["admin", "semua", "kategori", "agen", "mitra", "beranda", "toko", "tokoku", "api"];
+const cleanWa = v => { let n = String(v || "").replace(/\D/g, ""); if (n.startsWith("0")) n = "62" + n.slice(1); return n; };
+const safeColor = c => /^#[0-9a-f]{6}$/i.test(c || "") ? c : "#4A3AFF";
+const isImg = s => /^data:image\//.test(s || "");
+const pct = n => (Math.round(Number(n || 0) * 100) / 100) + "%";
+/* Alamat website tokomu yang sudah online (hosting), tanpa garis miring di akhir. Contoh: "https://database-e5b59.web.app"
+   Kosongkan hanya jika file dibuka dari server yang sama. Jika file dibuka dari komputer (file:///...), WAJIB diisi
+   supaya link toko/portal yang dibagikan bisa dibuka orang lain. */
+const PUBLIC_URL = "";
+const pageUrl = f => PUBLIC_URL ? PUBLIC_URL.replace(/\/+$/, "") + "/" + f : new URL(f, location.href).href;
+const siteBase = () => pageUrl("tokoku.html");
+
+const params = new URLSearchParams(location.search);
+
+let me = null, priv = {}, items = {}, orders = {}, cats = {}, store = {}, editId = null, pImg = "", sLogo = "";
+let unsubMe = null, unsubs = [], appOn = false;
+let threads = {}, chSel = null, chUnsub = null;
+
+const authError = c => ({
+  "auth/invalid-credential": "Email atau password salah.", "auth/invalid-email": "Format email tidak valid.",
+  "auth/user-disabled": "Akun ini dinonaktifkan.", "auth/too-many-requests": "Terlalu banyak percobaan. Coba lagi nanti.",
+  "auth/email-already-in-use": "Email sudah terdaftar. Silakan masuk, lalu lengkapi pendaftaran.",
+  "auth/weak-password": "Password terlalu lemah (minimal 6 karakter).",
+  "auth/operation-not-allowed": "Login email/password belum diaktifkan di Firebase.",
+  "auth/network-request-failed": "Koneksi bermasalah. Periksa internet kamu."
+}[c] || "Gagal (" + c + ").");
+
+/* ---------- Tampilan ---------- */
+function view(n){ ["vAuth", "vWait", "vApp"].forEach(v => $(v).hidden = v !== n); }
+function pane(up){ $("segIn").classList.toggle("on", !up); $("segUp").classList.toggle("on", up); $("paneIn").hidden = up; $("paneUp").hidden = !up; }
+$("segIn").onclick = () => pane(false); $("segUp").onclick = () => pane(true);
+if (location.hash === "#daftar" || params.has("daftar")) pane(true);
+$("rName").oninput = () => { if (!$("rSlug").dataset.t) $("rSlug").value = slugify($("rName").value); };
+$("rSlug").oninput = () => { $("rSlug").dataset.t = "1"; $("rSlug").value = $("rSlug").value.toLowerCase().replace(/[^a-z0-9-]/g, ""); };
+
+/* ---------- Masuk ---------- */
+$("loginForm").onsubmit = async e => {
+  e.preventDefault(); $("loginMsg").className = "msg"; $("loginMsg").textContent = ""; $("btnLogin").disabled = true;
+  try { await signInWithEmailAndPassword(auth, $("lEmail").value.trim(), $("lPass").value); }
+  catch (err) { $("loginMsg").textContent = authError(err.code); }
+  $("btnLogin").disabled = false;
+};
+$("btnReset").onclick = async () => {
+  const m = $("loginMsg"), em = $("lEmail").value.trim(); m.className = "msg";
+  if (!em) { m.textContent = "Isi email dulu, lalu klik Lupa password."; return; }
+  try { await sendPasswordResetEmail(auth, em); m.className = "msg ok"; m.textContent = "Tautan reset password dikirim ke " + em + "."; }
+  catch (err) { m.textContent = authError(err.code); }
+};
+const out = () => signOut(auth);
+$("btnOut").onclick = out; $("wOut").onclick = out; $("btnOutReg").onclick = out;
+
+/* ---------- Daftar (terbuka, tapi menunggu persetujuan admin) ---------- */
+function regMode(signedIn){
+  // sudah punya akun tapi belum punya data mitra: tidak perlu email/password lagi
+  $("rEmailL").hidden = $("rPassL").hidden = signedIn;
+  $("rEmail").required = $("rPass").required = !signedIn;
+  $("btnOutReg").classList.toggle("hidden", !signedIn);
+  $("upTitle").textContent = signedIn ? "Lengkapi data brand" : "Daftar sebagai mitra";
+}
+$("regForm").onsubmit = async e => {
+  e.preventDefault();
+  const m = $("regMsg"); m.className = "msg"; m.textContent = "";
+  const v = {
+    name: $("rName").value.trim(), slug: $("rSlug").value.trim(),
+    owner: $("rOwner").value.trim(), wa: cleanWa($("rWa").value), desc: $("rDesc").value.trim(), email: $("rEmail").value.trim(), pass: $("rPass").value
+  };
+  if (!/^[a-z0-9-]{3,30}$/.test(v.slug) || RESERVED.includes(v.slug)) { m.textContent = "Alamat toko tidak valid atau tidak boleh dipakai. Gunakan 3-30 huruf kecil, angka, atau strip."; return; }
+  if (!/^[0-9]{9,15}$/.test(v.wa)) { m.textContent = "Nomor WhatsApp tidak valid."; return; }
+  $("btnReg").disabled = true;
+  try {
+    if ((await getDoc(doc(db, "slugs", v.slug))).exists()) throw { msg: "Alamat toko sudah dipakai. Coba alamat lain." };
+    let u = auth.currentUser;
+    if (!u || u.isAnonymous) u = (await createUserWithEmailAndPassword(auth, v.email, v.pass)).user;
+    const b = writeBatch(db);
+    b.set(doc(db, "agents", u.uid), { uid: u.uid, name: v.name, slug: v.slug, owner: v.owner, wa: v.wa, desc: v.desc, color: "#4A3AFF", logo: "", status: "pending", createdAt: serverTimestamp() });
+    b.set(doc(db, "agentPrivate", u.uid), { email: u.email || v.email, bank: "", createdAt: serverTimestamp() });
+    b.set(doc(db, "slugs", v.slug), { uid: u.uid, createdAt: serverTimestamp() });
+    await b.commit();
+    toast("Pendaftaran terkirim");
+  } catch (err) { m.textContent = err.msg || (err.code && err.code.startsWith("auth/") ? authError(err.code) : "Gagal mendaftar (" + (err.code || err.message) + ")."); }
+  $("btnReg").disabled = false;
+};
+
+/* ---------- Status login ---------- */
+function stopApp(){ unsubs.forEach(f => f()); unsubs = []; if (chUnsub) { chUnsub(); chUnsub = null; } chSel = null; threads = {}; appOn = false; items = {}; orders = {}; priv = {}; }
+onAuthStateChanged(auth, user => {
+  if (unsubMe) { unsubMe(); unsubMe = null; } stopApp(); me = null;
+  if (!user || user.isAnonymous) { regMode(false); view("vAuth"); return; }
+  unsubMe = onSnapshot(doc(db, "agents", user.uid), s => {
+    if (!s.exists()) {
+      me = null; stopApp(); regMode(true); pane(true); view("vAuth");
+      const m = $("regMsg"); m.className = "msg ok";
+      m.textContent = "Login berhasil (" + (user.email || "") + "), tetapi akun ini belum punya data mitra. Mungkin belum didaftarkan, atau pendaftarannya sudah ditolak/dihapus admin. Lengkapi data brand di bawah, lalu tunggu persetujuan admin.";
+      return;
+    }
+    me = s.data();
+    if (me.status === "active") { view("vApp"); if (!appOn) startApp(user); renderHead(); fillProfile(false); renderAll(); }
+    else {
+      stopApp(); view("vWait");
+      $("wTitle").textContent = me.status === "suspended" ? "Akun mitra ditangguhkan" : "Pendaftaran sedang ditinjau";
+      $("wText").textContent = me.status === "suspended" ? "Toko dan produkmu disembunyikan sementara. Hubungi admin Tokoku untuk informasi lebih lanjut." : "Admin akan memeriksa data brand kamu. Setelah disetujui, portal ini langsung terbuka dan tokomu tampil di website.";
+      getDoc(doc(db, "settings", "store")).then(x => { const n = x.exists() ? String(x.data().waNumber || "").replace(/\D/g, "") : ""; $("wWa").hidden = !n; if (n) $("wWa").href = "https://wa.me/" + n + "?text=" + encodeURIComponent("Halo admin Tokoku, saya mitra " + me.name + ". Mohon info status akun saya."); }).catch(() => {});
+    }
+  }, e => {
+    toast("Gagal memuat akun: " + e.code); stopApp(); regMode(false); pane(false); view("vAuth");
+    const m = $("loginMsg"); m.className = "msg";
+    m.textContent = "Login berhasil, tetapi data akun tidak bisa dibaca (" + e.code + "). Biasanya Rules Firestore belum diterbitkan ulang. Hubungi admin.";
+  });
+});
+
+/* ---------- Tab ---------- */
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b));
+  ["ringkasan", "produk", "pesanan", "chat", "profil"].forEach(t => $("tab-" + t).classList.toggle("hidden", b.dataset.tab !== t));
+});
+
+/* ---------- Chat pelanggan (pesan dari produk milikmu) ---------- */
+const chVisible = () => !$("tab-chat").classList.contains("hidden");
+const chTime = ts => ts && ts.seconds ? new Date(ts.seconds * 1000).toLocaleString("id-ID", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "";
+function openLightbox(src){ if (!/^data:image\//.test(src)) return; const o = el("div", "clb"), i = el("img"); i.src = src; i.alt = "Gambar"; o.append(i); o.onclick = () => o.remove(); document.body.append(o); }
+function markChatRead(){ if (chSel && chVisible() && threads[chSel] && threads[chSel].unreadAgent > 0) updateDoc(doc(db, "agentChats", chSel), { unreadAgent: 0 }).catch(() => {}); }
+function renderChatList(){
+  const L = $("chList"); L.textContent = "";
+  const ids = Object.keys(threads).sort((a, b) => ((threads[b].lastAt || {}).seconds || 9e9) - ((threads[a].lastAt || {}).seconds || 9e9));
+  const unread = ids.filter(id => threads[id].unreadAgent > 0).length, bd = $("chBadge"); bd.hidden = !unread; bd.textContent = unread;
+  if (!ids.length) { L.append(el("div", "empty", "Belum ada pesan dari pelanggan.")); return; }
+  ids.forEach(id => {
+    const t = threads[id], b = el("button", "ci" + (id === chSel ? " on" : "")); b.type = "button";
+    const i = el("div"), n = el("b", "", t.name || "Pelanggan"); if (t.unreadAgent > 0) n.append(el("span", "badge", t.unreadAgent));
+    i.append(n, el("small", "", (t.prod ? "[" + t.prod + "] " : "") + (t.lastFrom === "agent" ? "Kamu: " : "") + (t.lastMsg || "")));
+    b.append(i); b.onclick = () => selectChat(id); L.append(b);
+  });
+}
+function selectChat(id){
+  chSel = id; if (chUnsub) { chUnsub(); chUnsub = null; }
+  const t = threads[id] || {};
+  $("chWho").textContent = t.name || "Pelanggan"; $("chProd").textContent = t.prod ? "Produk: " + t.prod : "";
+  $("chText").disabled = $("chSend").disabled = false;
+  renderChatList(); markChatRead();
+  chUnsub = onSnapshot(query(collection(db, "agentChats", id, "messages"), orderBy("createdAt", "asc")), s => {
+    const box = $("chMsgs"); box.textContent = "";
+    s.forEach(x => {
+      const m = x.data(), d = el("div", "cm " + (m.from === "agent" ? "adm" : "usr"));
+      if (m.prodName) d.append(el("div", "cp", "Produk: " + m.prodName + (m.prodPrice ? " · " + rp(m.prodPrice) : "")));
+      if (m.img && /^data:image\//.test(m.img)) { const im = el("img", "cimg"); im.src = m.img; im.alt = "Gambar"; im.onclick = () => openLightbox(m.img); d.append(im); }
+      if (m.text) d.append(el("div", "", m.text));
+      d.append(el("small", "", chTime(m.createdAt))); box.append(d);
+    });
+    box.scrollTop = box.scrollHeight; markChatRead();
+  }, e => toast("Pesan tidak bisa dimuat: " + e.code));
+}
+$("chText").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("chForm").requestSubmit(); } });
+$("chForm").onsubmit = async e => {
+  e.preventDefault(); const text = $("chText").value.trim(); if (!text || !chSel || !me) return;
+  $("chSend").disabled = true; $("chText").value = "";
+  try {
+    await addDoc(collection(db, "agentChats", chSel, "messages"), { from: "agent", text, name: (me.name || "Penjual").slice(0, 40), createdAt: serverTimestamp() });
+    await updateDoc(doc(db, "agentChats", chSel), { lastMsg: text.slice(0, 100), lastFrom: "agent", lastAt: serverTimestamp(), unreadAgent: 0, unreadUser: increment(1) });
+  } catch (err) { $("chText").value = text; toast("Gagal mengirim: " + (err.code || err.message)); }
+  $("chSend").disabled = false; $("chText").focus();
+};
+
+/* ---------- Data ---------- */
+function startApp(user){
+  appOn = true;
+  const note = t => e => toast(t + ": " + e.code);
+  unsubs.push(onSnapshot(doc(db, "agentPrivate", user.uid), s => { priv = s.exists() ? s.data() : {}; $("sBank").value = priv.bank || ""; renderAll(); }, note("Data pribadi")));
+  unsubs.push(onSnapshot(query(collection(db, "products"), where("agentId", "==", user.uid)), s => { items = {}; s.forEach(d => items[d.id] = d.data()); renderAll(); }, note("Produk")));
+  unsubs.push(onSnapshot(query(collection(db, "agentOrders"), where("agentId", "==", user.uid)), s => { orders = {}; s.forEach(d => orders[d.id] = d.data()); renderAll(); }, note("Pesanan")));
+  unsubs.push(onSnapshot(query(collection(db, "agentChats"), where("agentId", "==", user.uid)), s => { threads = {}; s.forEach(d => threads[d.id] = d.data()); renderChatList(); markChatRead(); }, note("Chat")));
+  unsubs.push(onSnapshot(collection(db, "categories"), s => { cats = {}; s.forEach(d => cats[d.id] = d.data()); fillCats(); }, () => {}));
+  unsubs.push(onSnapshot(doc(db, "settings", "store"), s => { store = s.exists() ? s.data() : {}; renderAll(); }, () => {}));
+}
+const pctNow = () => Number(priv.commission ?? store.agentCommission ?? 10);
+const cm = o => Math.round((o.total || 0) * Number(o.commissionPct ?? 0) / 100);
+const odate = o => { const t = (o.paid && o.paidAt) || o.createdAt; return t && t.seconds ? new Date(t.seconds * 1000) : new Date(); };
+const ym = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+const nowYm = () => ym(new Date());
+
+function renderHead(){
+  const nm = me.name || "Mitra";
+  $("hello").textContent = "Halo, " + (me.owner || nm).split(" ")[0] + "!";
+  $("who").textContent = nm;
+  const av = $("avatar"); av.textContent = isImg(me.logo) ? "" : nm[0].toUpperCase(); av.style.backgroundImage = isImg(me.logo) ? `url("${me.logo}")` : "none";
+  const link = siteBase() + "#agen/" + me.slug;
+  $("myLink").textContent = link; $("hView").href = link; renderAltLinks(link);
+  const lh = $("linkHint"); if (lh) lh.hidden = !(location.protocol === "file:" && !PUBLIC_URL);
+  $("sSlug").value = me.slug;
+  const n = String(store.waNumber || "").replace(/\D/g, ""); $("adminWa").hidden = !n; if (n) $("adminWa").href = "https://wa.me/" + n + "?text=" + encodeURIComponent("Halo admin Tokoku, saya mitra " + nm + ".");
+}
+/* ---------- Link alternatif & bagikan ---------- */
+function renderAltLinks(main){
+  const box = $("altLinks"); if (!box) return; box.textContent = "";
+  const slug = encodeURIComponent(me.slug), wa = String(me.wa || "").replace(/\D/g, "");
+  const promo = "Belanja produk " + (me.name || "kami") + " di Tokoku: ";
+  const rows = [
+    ["Link singkat (tahan dibagikan)", pageUrl("tokoku.html") + "?agen=" + slug, "Dipakai kalau link utama gagal terbuka di aplikasi tertentu."],
+    ["Link chat WhatsApp", wa ? "https://wa.me/" + wa + "?text=" + encodeURIComponent("Halo " + (me.name || "") + ", saya mau tanya produk.") : "", "Pembeli langsung masuk ke chat WhatsApp-mu. Cocok untuk bio dan story."]
+  ].filter(r => r[1]);
+  rows.forEach(([lb, url, tip]) => {
+    const w = el("div"), l = el("div", "muted", lb); l.style.cssText = "font-weight:600;font-size:.88rem;margin-bottom:4px";
+    const lk = el("div", "linkbox"), c = el("code", "", url);
+    lk.append(c, mkBtn("Salin", async () => { try { await navigator.clipboard.writeText(url); toast("Link disalin"); } catch (e) { prompt("Salin link:", url); } }));
+    const t = el("p", "muted", tip); t.style.cssText = "margin-top:4px;font-size:.82rem";
+    w.append(l, lk, t); box.append(w);
+  });
+  const sh = el("div"), sl = el("div", "muted", "Bagikan toko"); sl.style.cssText = "font-weight:600;font-size:.88rem;margin-bottom:6px";
+  const r = el("div", "row"), enc = encodeURIComponent;
+  if (navigator.share) r.append(mkBtn("Bagikan...", () => navigator.share({ title: me.name, text: promo, url: main }).catch(() => {}), "primary"));
+  r.append(
+    mkBtn("WhatsApp", () => window.open("https://wa.me/?text=" + enc(promo + main), "_blank", "noopener"), navigator.share ? "" : "primary"),
+    mkBtn("Telegram", () => window.open("https://t.me/share/url?url=" + enc(main) + "&text=" + enc(promo), "_blank", "noopener")),
+    mkBtn("Facebook", () => window.open("https://www.facebook.com/sharer/sharer.php?u=" + enc(main), "_blank", "noopener")),
+    mkBtn("X", () => window.open("https://twitter.com/intent/tweet?url=" + enc(main) + "&text=" + enc(promo), "_blank", "noopener")),
+    mkBtn("Kode QR", () => window.open("https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=12&data=" + enc(main), "_blank", "noopener")),
+    mkBtn("Salin teks promosi", async () => { const t = promo + main; try { await navigator.clipboard.writeText(t); toast("Teks promosi disalin"); } catch (e) { prompt("Salin teks:", t); } }));
+  sh.append(sl, r); box.append(sh);
+}
+$("copyLink").onclick = async () => { try { await navigator.clipboard.writeText($("myLink").textContent); toast("Link disalin"); } catch (e) { toast("Salin manual: tekan lama pada link"); } };
+
+function renderAll(){
+  if (!me || me.status !== "active") return;
+  renderHead(); renderStats(); renderProducts(); renderOrders(); fillProdSelect();
+  $("howPct").textContent = "Komisi untuk Tokoku: " + pct(pctNow()) + " dari setiap penjualan lunas.";
+}
+function renderStats(){
+  const all = Object.values(orders), m = nowYm();
+  const okOrders = all.filter(o => o.paid && o.status !== "Batal");
+  const sales = okOrders.filter(o => ym(odate(o)) === m).reduce((t, o) => t + (o.total || 0), 0);
+  const due = okOrders.filter(o => !o.commissionPaid).reduce((t, o) => t + cm(o), 0);
+  const wait = all.filter(o => !o.paid && o.status !== "Batal").length;
+  const act = Object.values(items).filter(p => p.active !== false && !p.hold).length;
+  const st = $("stats"); st.textContent = "";
+  [["Penjualan lunas bulan ini", rp(sales), "ok"], ["Komisi yang perlu disetor", rp(due), "warn"], ["Menunggu pembayaran", wait, ""], ["Produk tampil", act, ""]]
+    .forEach(([l, v, c]) => { const d = el("div", "stat " + c); d.append(el("b", "", v), el("span", "", l)); st.append(d); });
+}
+
+/* ---------- Gambar ---------- */
+function toImg(file, W, H, cap){
+  return new Promise((ok, no) => {
+    if (!/^image\//.test(file.type)) return no(new Error("File bukan gambar"));
+    const im = new Image(), u = URL.createObjectURL(file);
+    im.onload = () => {
+      const c = document.createElement("canvas"); c.width = W; c.height = H;
+      const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, W, H);
+      const r = Math.max(W / im.width, H / im.height), w = im.width * r, h = im.height * r;
+      x.drawImage(im, (W - w) / 2, (H - h) / 2, w, h); URL.revokeObjectURL(u);
+      let q = .85, d = c.toDataURL("image/jpeg", q);
+      while (d.length > cap && q > .4) { q -= .1; d = c.toDataURL("image/jpeg", q); }
+      d.length > cap * 1.25 ? no(new Error("Gambar terlalu besar")) : ok(d);
+    };
+    im.onerror = () => { URL.revokeObjectURL(u); no(new Error("File bukan gambar yang valid")); }; im.src = u;
+  });
+}
+
+/* ---------- Produk ---------- */
+function fillCats(){
+  const sel = $("pCat"), v = sel.value; sel.textContent = "";
+  const o0 = el("option", "", "Tanpa kategori"); o0.value = ""; sel.append(o0);
+  Object.keys(cats).filter(id => cats[id].active !== false).sort((a, b) => (cats[a].order || 0) - (cats[b].order || 0))
+    .forEach(id => { const o = el("option", "", (cats[id].icon ? cats[id].icon + " " : "") + cats[id].name); o.value = id; sel.append(o); });
+  sel.value = v;
+}
+const pSetPrev = () => { $("pPrev").style.backgroundImage = pImg ? `url("${pImg}")` : "none"; $("pClr").classList.toggle("hidden", !pImg); };
+$("pFile").onchange = async e => { const f = e.target.files[0]; if (!f) return; try { pImg = await toImg(f, 800, 800, 220000); pSetPrev(); } catch (err) { toast(err.message); e.target.value = ""; } };
+$("pClr").onclick = () => { pImg = ""; $("pFile").value = ""; pSetPrev(); };
+function pReset(){ editId = null; pImg = ""; pSetPrev(); $("pForm").reset(); $("pColor").value = "#B8B2FF"; $("pActive").checked = true; $("pTitle").textContent = "Tambah produk"; $("pSave").textContent = "Simpan produk"; }
+$("pCancel").onclick = pReset;
+function pEdit(id){
+  const p = items[id]; editId = id;
+  $("pName").value = p.name || ""; $("pDesc").value = p.desc || ""; $("pPrice").value = p.price ?? ""; $("pOld").value = p.old || "";
+  $("pTag").value = p.tag || ""; $("pStock").value = p.stock ?? ""; $("pCat").value = p.cat || ""; $("pColor").value = p.color || "#B8B2FF";
+  pImg = p.img || ""; $("pFile").value = ""; pSetPrev(); $("pActive").checked = p.active !== false;
+  $("pTitle").textContent = "Edit produk"; $("pSave").textContent = "Simpan perubahan"; window.scrollTo({ top: 0, behavior: "smooth" });
+}
+$("pForm").onsubmit = async e => {
+  e.preventDefault();
+  const num = id => $(id).value === "" ? null : Number($(id).value);
+  const d = { name: $("pName").value.trim(), desc: $("pDesc").value.trim(), price: Number($("pPrice").value), old: num("pOld") || 0, tag: $("pTag").value.trim(), stock: num("pStock"), cat: $("pCat").value, color: $("pColor").value, img: pImg, active: $("pActive").checked };
+  $("pSave").disabled = true;
+  try {
+    if (editId) await updateDoc(doc(db, "products", editId), d);
+    else await addDoc(collection(db, "products"), { ...d, agentId: me.uid, agentName: me.name, agentSlug: me.slug, hold: false, createdAt: serverTimestamp() });
+    toast(editId ? "Perubahan disimpan" : "Produk ditambahkan"); pReset();
+  } catch (err) { toast("Gagal menyimpan: " + (err.code || err.message)); }
+  $("pSave").disabled = false;
+};
+function renderProducts(){
+  const l = $("pList"); l.textContent = "";
+  const ids = Object.keys(items).sort((a, b) => (items[b].createdAt?.seconds || 9e9) - (items[a].createdAt?.seconds || 9e9));
+  if (!ids.length) { l.append(el("div", "empty panel", "Belum ada produk. Tambahkan produk pertamamu lewat form di atas.")); return; }
+  ids.forEach(id => {
+    const p = items[id], r = el("div", "item"), sw = el("div", "sw"); sw.style.backgroundColor = p.color || "#ccc"; if (isImg(p.img)) sw.style.backgroundImage = `url("${p.img}")`;
+    const i = el("div"), h = el("h3", "", p.name);
+    if (p.hold) h.append(el("span", "badge", "Diblokir admin")); else if (p.active === false) h.append(el("span", "badge", "Disembunyikan"));
+    i.append(h, el("p", "", rp(p.price) + (p.old > p.price ? " (coret " + rp(p.old) + ")" : "") + " | Stok: " + (p.stock == null ? "tidak dibatasi" : p.stock)));
+    const a = el("div", "row");
+    a.append(mkBtn("Edit", () => pEdit(id)),
+      mkBtn("Stok", async () => { const d = prompt("Tambah atau kurangi stok. Contoh: 10 atau -3", "10"); if (d == null) return; const n = Math.trunc(Number(d)); if (!n) return toast("Angka tidak valid"); if (p.stock == null) return toast("Stok tidak dibatasi. Isi angka stok lewat Edit."); try { await updateDoc(doc(db, "products", id), { stock: increment(n) }); toast("Stok diperbarui"); } catch (err) { toast("Gagal: " + err.code); } }),
+      mkBtn(p.active === false ? "Tampilkan" : "Sembunyikan", () => updateDoc(doc(db, "products", id), { active: p.active === false }).catch(err => toast("Gagal: " + err.code))),
+      mkBtn("Hapus", async () => { if (confirm("Hapus produk \"" + p.name + "\"?")) { try { await deleteDoc(doc(db, "products", id)); toast("Produk dihapus"); } catch (err) { toast("Gagal: " + err.code); } } }, "danger"));
+    r.append(sw, i, a); l.append(r);
+  });
+}
+
+/* ---------- Pesanan ---------- */
+const STATUS = ["Menunggu Pembayaran", "Diproses", "Dikirim", "Selesai", "Batal"];
+function fillProdSelect(){
+  const s = $("oProd"), v = s.value; s.textContent = "";
+  const o0 = el("option", "", "Produk lain (tulis di catatan)"); o0.value = ""; s.append(o0);
+  Object.keys(items).forEach(id => { const o = el("option", "", items[id].name + " (" + rp(items[id].price) + ")"); o.value = id; s.append(o); });
+  if (items[v]) s.value = v;
+}
+function autoTotal(){ const p = items[$("oProd").value]; if (p) $("oTotal").value = p.price * (Number($("oQty").value) || 1); }
+$("oProd").onchange = autoTotal; $("oQty").oninput = autoTotal;
+$("oForm").onsubmit = async e => {
+  e.preventDefault();
+  const pid = $("oProd").value, p = items[pid], qty = Number($("oQty").value) || 1;
+  const d = { agentId: me.uid, agentName: me.name, name: $("oName").value.trim(), phone: $("oPhone").value.trim(), pid, prod: p ? p.name : "Produk lain", qty, total: Number($("oTotal").value) || 0, note: $("oNote").value.trim(),
+    status: "Menunggu Pembayaran", paid: false, commissionPct: pctNow(), commissionPaid: false, createdAt: serverTimestamp() };
+  try { await addDoc(collection(db, "agentOrders"), d); $("oForm").reset(); $("oQty").value = 1; toast("Pesanan disimpan"); }
+  catch (err) { toast("Gagal menyimpan: " + (err.code || err.message)); }
+};
+async function stockAdj(o, dir){ const p = items[o.pid]; if (o.pid && p && p.stock != null) { try { await updateDoc(doc(db, "products", o.pid), { stock: increment(dir * (o.qty || 1)) }); } catch (e) {} } }
+async function markPaid(id){ const o = orders[id]; if (!o || o.paid) return; try { await updateDoc(doc(db, "agentOrders", id), { paid: true, paidAt: serverTimestamp(), status: "Diproses" }); await stockAdj(o, -1); toast("Pesanan ditandai lunas"); } catch (err) { toast("Gagal: " + (err.code || err.message)); } }
+async function undoPaid(id, st){ const o = orders[id]; if (!o || !o.paid) return; try { await updateDoc(doc(db, "agentOrders", id), { paid: false, status: st }); await stockAdj(o, 1); toast(st === "Batal" ? "Pesanan dibatalkan" : "Status lunas dibatalkan"); } catch (err) { toast("Gagal: " + (err.code || err.message)); } }
+async function setStatus(id, st){
+  const o = orders[id]; if (!o) return;
+  if (o.commissionPaid) { toast("Komisi sudah diterima admin, pesanan terkunci"); renderOrders(); return; }
+  if (st === "Batal" || st === "Menunggu Pembayaran") { if (o.paid) { if (confirm("Pesanan sudah lunas. Batalkan status lunas dan kembalikan stok?")) await undoPaid(id, st); else renderOrders(); return; } }
+  else if (!o.paid) { toast("Tandai lunas dulu"); renderOrders(); return; }
+  try { await updateDoc(doc(db, "agentOrders", id), { status: st }); toast("Status diubah: " + st); } catch (err) { toast("Gagal: " + (err.code || err.message)); }
+}
+function renderOrders(){
+  const l = $("oList"); l.textContent = "";
+  const f = $("oFilter").value, m = $("oMonth").value;
+  const ids = Object.keys(orders).filter(id => { const o = orders[id]; if (f && o.status !== f) return false; if (m && ym(odate(o)) !== m) return false; return true; })
+    .sort((a, b) => (orders[b].createdAt?.seconds || 9e9) - (orders[a].createdAt?.seconds || 9e9));
+  $("oCount").textContent = ids.length + " pesanan";
+  if (!ids.length) { l.append(el("div", "empty panel", "Belum ada pesanan.")); return; }
+  ids.forEach(id => {
+    const o = orders[id], r = el("div", "item"), sg = el("div", "sw", "x" + o.qty); sg.style.background = "#4A3AFF";
+    const i = el("div"), h = el("h3", "", o.name);
+    h.append(el("span", "badge " + (o.paid ? "ok" : o.status === "Batal" ? "" : "wait"), o.paid ? "Lunas" : o.status === "Batal" ? "Batal" : "Belum bayar"));
+    if (o.commissionPaid) h.append(el("span", "badge ok", "Komisi diterima"));
+    const when = o.createdAt && o.createdAt.seconds ? new Date(o.createdAt.seconds * 1000).toLocaleDateString("id-ID", { day: "numeric", month: "short" }) : "";
+    i.append(h, el("p", "", o.prod + " | " + rp(o.total) + " | Komisi " + rp(cm(o)) + " (" + pct(o.commissionPct) + ")" + (when ? " | " + when : "")));
+    if (o.note) i.append(el("p", "", o.note));
+    const a = el("div", "row"), sel = el("select"); sel.style.width = "auto";
+    if (!o.commissionPaid) {
+      if (o.paid) a.append(mkBtn("Batalkan lunas", () => { if (confirm("Batalkan status lunas dan kembalikan stok?")) undoPaid(id, "Menunggu Pembayaran"); }));
+      else if (o.status !== "Batal") a.append(mkBtn("Tandai lunas", () => markPaid(id), "primary"));
+    }
+    STATUS.forEach(x => { const op = el("option", "", x); op.value = x; sel.append(op); }); sel.value = o.status; sel.disabled = !!o.commissionPaid; sel.onchange = () => setStatus(id, sel.value);
+    a.append(sel);
+    if (o.phone) { const n = cleanWa(o.phone); a.append(mkBtn("WhatsApp", () => window.open("https://wa.me/" + n + "?text=" + encodeURIComponent("Halo " + o.name + ", pesanan " + o.prod + " (" + rp(o.total) + ") dari " + me.name + ". Terima kasih!"), "_blank", "noopener"))); }
+    r.append(sg, i, a); l.append(r);
+  });
+}
+$("oFilter").onchange = renderOrders; $("oMonth").onchange = renderOrders;
+
+/* ---------- Profil ---------- */
+function fillProfile(force){
+  if (!force && $("sName").dataset.f) return; $("sName").dataset.f = "1";
+  $("sName").value = me.name || ""; $("sOwner").value = me.owner || ""; $("sWa").value = me.wa || ""; $("sColor").value = safeColor(me.color); $("sDesc").value = me.desc || "";
+  sLogo = isImg(me.logo) ? me.logo : ""; sSetPrev();
+}
+const sSetPrev = () => { $("sPrev").style.backgroundImage = sLogo ? `url("${sLogo}")` : "none"; $("sClr").classList.toggle("hidden", !sLogo); };
+$("sFile").onchange = async e => { const f = e.target.files[0]; if (!f) return; try { sLogo = await toImg(f, 240, 240, 40000); sSetPrev(); } catch (err) { toast(err.message); e.target.value = ""; } };
+$("sClr").onclick = () => { sLogo = ""; $("sFile").value = ""; sSetPrev(); };
+$("sForm").onsubmit = async e => {
+  e.preventDefault();
+  const wa = cleanWa($("sWa").value); if (!/^[0-9]{9,15}$/.test(wa)) return toast("Nomor WhatsApp tidak valid");
+  try {
+    await updateDoc(doc(db, "agents", me.uid), { name: $("sName").value.trim(), owner: $("sOwner").value.trim(), wa, color: $("sColor").value, desc: $("sDesc").value.trim(), logo: sLogo });
+    await updateDoc(doc(db, "agentPrivate", me.uid), { bank: $("sBank").value.trim() });
+    toast("Profil disimpan");
+  } catch (err) { toast("Gagal menyimpan: " + (err.code || err.message)); }
+};
+</script>
+</body>
+</html>
