@@ -354,7 +354,7 @@ h2.sec{margin:26px 0 12px;font-size:1.15rem}
 
     <div id="tab-pesanan" class="hidden">
       <div class="panel">
-        <h2 style="margin-bottom:16px;font-size:1.3rem">Catat pesanan dari WhatsApp</h2><p class="empty" style="text-align:left">Periksa stok dan ongkir lewat WhatsApp admin. Setelah pembayaran masuk, catat pesanan di sini, konfirmasi pembayaran, lalu selesaikan transfer hasil penjualan ke brand/mitra sesuai kesepakatan.</p>
+        <h2 style="margin-bottom:16px;font-size:1.3rem">Catat pesanan manual</h2><p class="empty" style="text-align:left">Pesanan dari checkout situs akan muncul otomatis di daftar pesanan. Cocokkan pesan WhatsApp, stok, dan ongkir. Setelah dana benar-benar diterima, klik Pembayaran sukses pada pesanan. Penjualan brand/mitra tercatat di menu agen; transfer hasil penjualan kepada brand dilakukan admin sesuai kesepakatan.</p>
         <form id="oForm">
           <label>Nama pelanggan<input id="oName" required maxlength="60"></label>
           <label>No. WhatsApp<input id="oPhone" type="tel" placeholder="08123456789"></label>
@@ -978,13 +978,21 @@ async function stockAdjust(o, dir, why){
 async function updateOrderAndAgent(id, fields){
   const batch = writeBatch(db), orderRef = doc(db, "orders", id), o = orders[id];
   batch.update(orderRef, fields);
-  if (o?.agentId) batch.set(doc(db, "agentOrders", id), fields, { merge: true });
+  if (o?.agentId && ago?.[id]) batch.set(doc(db, "agentOrders", id), fields, { merge: true });
   await batch.commit();
 }
 async function confirmPay(id){
   const o = orders[id]; if (!o || o.paid) return;
   try {
-    await updateOrderAndAgent(id, { paid: true, paidAt: serverTimestamp(), status: "Diproses" });
+    const paidAt=serverTimestamp(), batch=writeBatch(db);
+    batch.update(doc(db, "orders", id), { paid: true, paidAt, status: "Diproses" });
+    if(o.agentId){
+      const agent=ags[o.agentId]||{}, privateAgent=agp[o.agentId]||{};
+      const rawPct=privateAgent.commission != null ? privateAgent.commission : (storeSet.agentCommission ?? 10);
+      const commissionPct=Math.max(0,Math.min(100,Number(rawPct)||0));
+      batch.set(doc(db, "agentOrders", id), { orderId:id,agentId:o.agentId,agentName:agent.name||o.agentName||"Mitra",name:o.name||"Pelanggan",pid:o.pid||"",prod:o.prod||"Pesanan Tokoku",items:o.items||[],qty:o.qty||1,total:Number(o.total)||0,status:"Diproses",paid:true,paidAt,commissionPct,commissionPaid:false,createdAt:o.createdAt||serverTimestamp() }, { merge:true });
+    }
+    await batch.commit();
     if (o.total > 0) await setDoc(doc(db, "finance", "order_" + id), { date: today(), type: "in", cat: "Penjualan", amount: o.total, note: "Pesanan #" + ocode(id) + " " + o.name + " - " + o.prod, orderId: id, createdAt: serverTimestamp() });
     await stockAdjust(o, -1, "Pesanan #" + ocode(id));
     if (o.code && promos[o.code]) await updateDoc(doc(db, "promos", o.code), { used: increment(1) });
@@ -1045,6 +1053,7 @@ function renderOrders(){
     if (!o.paid && o.proof && o.status !== "Batal") { const pb = el("span", "badge", "Ada bukti bayar"); pb.style.background = "#F59E0B"; h.append(pb); }
     const when = ordDate(o) ? ordDate(o).toLocaleDateString("id-ID", { day: "numeric", month: "short" }) : "";
     i.append(h, el("p", "", o.prod + " | " + rp(o.total) + (o.code ? " | Kode " + o.code : "") + (when ? " | " + when : "")));
+    if (o.promoRequest) i.append(el("p", "", "Pelanggan meminta kode promo " + o.promoRequest + "; periksa dan sesuaikan sebelum konfirmasi pembayaran."));
     if (o.courier) i.append(el("p", "", "Kurir: " + o.courier + " (" + (o.shipping > 0 ? rp(o.shipping) : "gratis") + ")" + (o.resi ? " | Resi: " + o.resi : "")));
     if (o.address) i.append(el("p", "", "Kirim ke: " + o.address + (o.note ? " | " + o.note : "")));
     else if (o.note) i.append(el("p", "", o.note));
