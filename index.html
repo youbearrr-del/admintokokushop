@@ -354,7 +354,7 @@ h2.sec{margin:26px 0 12px;font-size:1.15rem}
 
     <div id="tab-pesanan" class="hidden">
       <div class="panel">
-        <h2 style="margin-bottom:16px;font-size:1.3rem">Catat pesanan</h2>
+        <h2 style="margin-bottom:16px;font-size:1.3rem">Catat pesanan dari WhatsApp</h2><p class="empty" style="text-align:left">Periksa stok dan ongkir lewat WhatsApp admin. Setelah pembayaran masuk, catat pesanan di sini, konfirmasi pembayaran, lalu selesaikan transfer hasil penjualan ke brand/mitra sesuai kesepakatan.</p>
         <form id="oForm">
           <label>Nama pelanggan<input id="oName" required maxlength="60"></label>
           <label>No. WhatsApp<input id="oPhone" type="tel" placeholder="08123456789"></label>
@@ -975,10 +975,16 @@ async function stockAdjust(o, dir, why){
     for (const [v, d] of logs) await logStock(pid, v, d, why);
   }
 }
+async function updateOrderAndAgent(id, fields){
+  const batch = writeBatch(db), orderRef = doc(db, "orders", id), o = orders[id];
+  batch.update(orderRef, fields);
+  if (o?.agentId) batch.set(doc(db, "agentOrders", id), fields, { merge: true });
+  await batch.commit();
+}
 async function confirmPay(id){
   const o = orders[id]; if (!o || o.paid) return;
   try {
-    await updateDoc(doc(db, "orders", id), { paid: true, paidAt: serverTimestamp(), status: "Diproses" });
+    await updateOrderAndAgent(id, { paid: true, paidAt: serverTimestamp(), status: "Diproses" });
     if (o.total > 0) await setDoc(doc(db, "finance", "order_" + id), { date: today(), type: "in", cat: "Penjualan", amount: o.total, note: "Pesanan #" + ocode(id) + " " + o.name + " - " + o.prod, orderId: id, createdAt: serverTimestamp() });
     await stockAdjust(o, -1, "Pesanan #" + ocode(id));
     if (o.code && promos[o.code]) await updateDoc(doc(db, "promos", o.code), { used: increment(1) });
@@ -988,7 +994,7 @@ async function confirmPay(id){
 async function undoPay(id, status){
   const o = orders[id]; if (!o || !o.paid) return;
   try {
-    await updateDoc(doc(db, "orders", id), { paid: false, status });
+    await updateOrderAndAgent(id, { paid: false, paidAt: null, status });
     await deleteDoc(doc(db, "finance", "order_" + id));
     await stockAdjust(o, 1, "Batal bayar #" + ocode(id));
     if (o.code && promos[o.code] && (promos[o.code].used || 0) > 0) await updateDoc(doc(db, "promos", o.code), { used: increment(-1) });
@@ -1000,7 +1006,7 @@ async function setStatus(id, st){
   if (st === "Batal" || st === "Menunggu Pembayaran") {
     if (o.paid) { if (confirm("Pembayaran sudah dikonfirmasi. Batalkan pembayaran, kembalikan stok, dan hapus pemasukannya?")) await undoPay(id, st); else renderOrders(); return; }
   } else if (!o.paid) { toast("Tekan Pembayaran sukses dulu"); renderOrders(); return; }
-  try { await updateDoc(doc(db, "orders", id), { status: st }); toast("Status diubah: " + st); }
+  try { await updateOrderAndAgent(id, { status: st }); toast("Status diubah: " + st); }
   catch (err) { toast("Gagal: " + (err.code || err.message)); }
 }
 const ordDate = o => o.createdAt && o.createdAt.seconds ? new Date(o.createdAt.seconds * 1000) : null;
@@ -1018,7 +1024,7 @@ async function setResi(id){
   const o = orders[id]; if (!o) return;
   if (!o.paid && o.status !== "Batal") { toast("Konfirmasi pembayaran dulu"); return; }
   const r = prompt("Nomor resi" + (o.courier ? " (" + o.courier + ")" : ""), o.resi || ""); if (r == null) return;
-  try { await updateDoc(doc(db, "orders", id), { resi: r.trim(), ...(r.trim() && o.status === "Diproses" ? { status: "Dikirim" } : {}) }); toast(r.trim() ? "Resi disimpan, status Dikirim" : "Resi dihapus"); }
+  try { const fields = { resi: r.trim(), ...(r.trim() && o.status === "Diproses" ? { status: "Dikirim" } : {}) }; await updateOrderAndAgent(id, fields); toast(r.trim() ? "Resi disimpan, status Dikirim" : "Resi dihapus"); }
   catch (err) { toast("Gagal: " + (err.code || err.message)); }
 }
 function openProof(o){
