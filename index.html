@@ -1053,7 +1053,7 @@ function renderOrders(){
       const msg = o.resi ? "Halo " + o.name + ", pesanan #" + ocode(id) + " sudah dikirim via " + (o.courier || "kurir") + ". No. resi: " + o.resi + ". Terima kasih sudah belanja di Tokoku!"
         : o.paid ? "Halo " + o.name + ", pembayaran pesanan #" + ocode(id) + " sudah kami terima. Status: " + o.status + ". Terima kasih sudah belanja di Tokoku!" : "Halo " + o.name + ", pesanan #" + ocode(id) + " (" + o.prod + ") total " + rp(o.total) + ". Silakan lakukan pembayaran, lalu kirim bukti transfer ke sini ya.";
       a.append(mkBtn("WhatsApp", () => window.open("https://wa.me/" + n + "?text=" + encodeURIComponent(msg), "_blank", "noopener"))); }
-    a.append(mkBtn("Hapus", async () => { if (confirm("Hapus pesanan " + o.name + "?")) { if (o.paid || o.status === "Selesai") await deleteDoc(doc(db, "finance", "order_" + id)); selOrders.delete(id); await deleteDoc(doc(db, "orders", id)); toast("Pesanan dihapus"); } }, "danger"));
+    a.append(mkBtn("Hapus", async () => { if (o.agentId) { toast("Pesanan mitra tidak dihapus agar jejak komisi tetap ada. Ubah status menjadi Batal bila perlu."); return; } if (confirm("Hapus pesanan " + o.name + "?")) { if (o.paid || o.status === "Selesai") await deleteDoc(doc(db, "finance", "order_" + id)); selOrders.delete(id); await deleteDoc(doc(db, "orders", id)); toast("Pesanan dihapus"); } }, "danger"));
     r.append(sg, i, a); l.append(r);
   });
 }
